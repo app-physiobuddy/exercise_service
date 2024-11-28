@@ -1,0 +1,32 @@
+services:
+  exercise_server:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: exercise_server
+    working_dir: /app                       # Set the working directory inside the container
+    ports:
+      - "3001:3001"                       
+    environment:
+      NODE_ENV: development                 # Set environment variable
+      DATABASE_URL: postgresql://postgres:postgres@exercise_db:5432/exercise_db
+    depends_on:
+      - exercise_db                                  # Ensure DB is started first
+    volumes:
+      - ./app:/app               # Persistent volume for Node.js (empty or for logs)
+      - /app/node_modules           #this excludes the node_modules folder from overwriting the one inside the container
+    command: ["npm", "run", "dev"]
+    restart: on-failure
+
+  exercise_db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: exercise_db
+    volumes:
+      - exercise_db_postgres:/var/lib/postgresql/data  # Persistent volume for DB data
+    ports:
+      - "5432:5432"                        # Expose PostgreSQL port
+
+volumes:
+  exercise_db_postgres:  # Volume for PostgreSQL data

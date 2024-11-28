@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Exercise {
+  id_exercise    Int      @id @default(autoincrement())
+  id_company     Int
+  desc           String   @db.VarChar(255)
+  obs            String   @db.VarChar(255)
+  video_dir      String   @db.VarChar(255)
+  date_created   DateTime @db.Timestamptz @default(now())
+  date_updated   DateTime? @db.Timestamptz
+  date_deleted   DateTime? @db.Timestamptz
+  is_deleted     Boolean @default(false)
+  id_created_by  Int
+  id_category    Int
+  category       Category @relation(fields: [id_category], references: [id_category])
+  plan_exercises PlanExercise[]
+}
+
+model Category {
+  id_category    Int       @id @default(autoincrement())
+  name           String    @db.VarChar(255)
+  desc           String    @db.VarChar(255)
+  id_comp        Int
+  date_created   DateTime  @db.Timestamptz @default(now())
+  date_updated   DateTime? @db.Timestamptz
+  date_deleted   DateTime? @db.Timestamptz
+  is_deleted     Boolean   @default(false)
+  exercises      Exercise[]
+
+  @@unique([id_comp, name])
+}
+
+model Plan {
+  id_plan        Int      @id @default(autoincrement())
+  id_physio      Int
+  id_pac         Int
+  date_start     DateTime @db.Timestamptz
+  date_end       DateTime @db.Timestamptz
+  plan_exercises PlanExercise[]
+}
+
+model PlanExercise {
+  id_plan        Int
+  id_exercise    Int
+  exercise_desc  Boolean
+  monday         Boolean
+  tuesday        Boolean
+  wednesday      Boolean
+  thursday       Boolean
+  friday         Boolean
+  saturday       Boolean
+  sunday         Boolean
+  plan           Plan     @relation(fields: [id_plan], references: [id_plan])
+  exercise       Exercise @relation(fields: [id_exercise], references: [id_exercise])
+
+  @@id([id_plan, id_exercise])
+}

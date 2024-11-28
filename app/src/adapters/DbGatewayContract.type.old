@@ -1,0 +1,12 @@
+export interface DbGatewayContract<T, E> {
+    // Categories
+    createCategory: (data: T) => Promise<boolean| undefined>;
+    // getAllAdmin:
+    getCategoriesByCompanyId: (id_comp: number) => Promise<T[] | null>;
+    getCategoryById: (id_comp:number, category_id: number) => Promise<T| null>;
+    updateCategory: (data: T) => Promise<T| null>;
+    deleteCategory: (id_comp:number, category_id: number) => Promise<boolean| undefined>;
+
+    // Exercices
+    createExercise: (exercise: E) => Promise<boolean| undefined>;
+}
