@@ -18,6 +18,7 @@ datasource db {
 model Exercise {
   id_exercise    Int      @id @default(autoincrement())
   id_company     Int
+  name           String   @db.VarChar(255)
   desc           String   @db.VarChar(255)
   obs            String   @db.VarChar(255)
   video_dir      String   @db.VarChar(255)

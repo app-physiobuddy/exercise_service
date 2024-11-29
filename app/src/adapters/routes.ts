@@ -3,12 +3,19 @@ import { Router, Request, Response, NextFunction, Errback } from "express";
 export const router = Router();
 
 import CategoryControllers from "../adapters/CategoryControllers.js";
-import { PrismaRepository } from "../framework/database/prisma/prismaRepository.js";
+import ExerciseControllers from "../adapters/ExerciseControllers.js";
+import PrismaRepository from "../framework/database/prisma/PrismaRepository.js";
 import CategoryUseCases from "../application/use-cases/category-use-cases/index.js";
+import ExerciseUseCases from "../application/use-cases/exercise-use-cases/index.js";
 
 const prismaRepository = new PrismaRepository();
-const categoryUseCases = new CategoryUseCases(prismaRepository);
+const categoryUseCases = new CategoryUseCases(prismaRepository.categoryRepository);
 const categoryControllers = new CategoryControllers(categoryUseCases);
+
+const exerciseUseCases = new ExerciseUseCases(prismaRepository.exerciseRepository);
+const exerciseControllers = new ExerciseControllers(exerciseUseCases);
+
+
 
 const asyncHandler = (controller:any) => (req:Request, res:Response, next:NextFunction) => {
     Promise.resolve(controller(req, res, next)).catch(next);
@@ -41,21 +48,7 @@ router.delete("/companies/:company_id/:category_id", asyncHandler((req: Request,
 
 //Exercicios
 router.post("/companies/:company_id/exercises", asyncHandler((req: Request, res: Response) => 
-  res.send("Criar um exercício dessa empresa.")
-    /*
-  TODO:
-  Requer:
-  vem logado com role: therapist ou therapistAdmin
-  recebe o id da empresa = company_id
-
-  Ação:
-  recebe o video e faz upload no servidor da base de dados, e retorna o url
-  passa o url do video para a base de dados = video_dir
-  recebe o id da categoria = category_id
-  descricao = desc
-  observaloes = obs
-  created_by = therapist_id
-  */
+  exerciseControllers.createExercise(req, res)
 ));
 
 router.get("/companies/:company_id/exercises", asyncHandler((req: Request, res: Response) => 

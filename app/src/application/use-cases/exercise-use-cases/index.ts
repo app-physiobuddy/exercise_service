@@ -1,18 +1,18 @@
 import { DbGatewayContract } from "../../../adapters/DbGatewayContract.type";
-import { Category, Exercise } from "../../entities/Category";
-import createExerciseUseCase from "./createExerciseUseCase";
+import { Category, Exercise } from "../../entities/Entities";
+import createExerciseUseCase from "./createExerciseUseCase.js";
+
 
 export interface ExerciceUseCasesInterface {
-    createExercise: DbGatewayContract<Category, Exercise>["createExercise"];
+    createExercise: (exercise: Exercise) => Promise<boolean| undefined>;
+  }
 
-}
 
-
-class CategoryUseCases implements ExerciceUseCasesInterface {
+class ExerciseUseCases implements ExerciceUseCasesInterface {
     private createExercise_use_case: ExerciceUseCasesInterface["createExercise"];
 
     constructor(
-        Repository: DbGatewayContract<Category, Exercise>
+        Repository: DbGatewayContract["exerciseRepository"]
     ){
         this.createExercise_use_case = createExerciseUseCase(Repository);
 
@@ -25,4 +25,4 @@ class CategoryUseCases implements ExerciceUseCasesInterface {
 
 }
 
-export default CategoryUseCases
+export default ExerciseUseCases

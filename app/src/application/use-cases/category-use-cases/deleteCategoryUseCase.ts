@@ -1,8 +1,8 @@
-import { Category } from "../../entities/Category";
+import { Category, Exercise } from "../../entities/Entities";
 import { DbGatewayContract } from "../../../adapters/DbGatewayContract.type";
 import { CategoryUseCasesInterface } from "../category-use-cases/index";
 
-export default function deleteCategoryUseCase (Repository: DbGatewayContract<Category>)
+export default function deleteCategoryUseCase (Repository: DbGatewayContract["categoryRepository"])
 : CategoryUseCasesInterface["deleteCategory"]  {
     
     return async (id_comp: number, category_id: number) => {

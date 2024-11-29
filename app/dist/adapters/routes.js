@@ -1,11 +1,15 @@
 import { Router } from "express";
 export const router = Router();
 import CategoryControllers from "../adapters/CategoryControllers.js";
-import { PrismaRepository } from "../framework/database/prisma/prismaRepository.js";
+import ExerciseControllers from "../adapters/ExerciseControllers.js";
+import PrismaRepository from "../framework/database/prisma/PrismaRepository.js";
 import CategoryUseCases from "../application/use-cases/category-use-cases/index.js";
+import ExerciseUseCases from "../application/use-cases/exercise-use-cases/index.js";
 const prismaRepository = new PrismaRepository();
-const categoryUseCases = new CategoryUseCases(prismaRepository);
+const categoryUseCases = new CategoryUseCases(prismaRepository.categoryRepository);
 const categoryControllers = new CategoryControllers(categoryUseCases);
+const exerciseUseCases = new ExerciseUseCases(prismaRepository.exerciseRepository);
+const exerciseControllers = new ExerciseControllers(exerciseUseCases);
 const asyncHandler = (controller) => (req, res, next) => {
     Promise.resolve(controller(req, res, next)).catch(next);
 };
@@ -17,22 +21,7 @@ router.get("/companies/:company_id/:category_id", asyncHandler((req, res) => cat
 router.put("/companies/:company_id/:category_id", asyncHandler((req, res) => categoryControllers.updateCategory(req, res)));
 router.delete("/companies/:company_id/:category_id", asyncHandler((req, res) => categoryControllers.deleteCategory(req, res)));
 //Exercicios
-router.post("/companies/:company_id/exercises", asyncHandler((req, res) => res.send("Criar um exercício dessa empresa.")
-/*
-TODO:
-Requer:
-vem logado com role: therapist ou therapistAdmin
-recebe o id da empresa = company_id
-
-Ação:
-recebe o video e faz upload no servidor da base de dados, e retorna o url
-passa o url do video para a base de dados = video_dir
-recebe o id da categoria = category_id
-descricao = desc
-observaloes = obs
-created_by = therapist_id
-*/
-));
+router.post("/companies/:company_id/exercises", asyncHandler((req, res) => exerciseControllers.createExercise(req, res)));
 router.get("/companies/:company_id/exercises", asyncHandler((req, res) => res.send("Listar todos os exercícios da empresa.")));
 router.get("/companies/:company_id/exercises/:exercise_id", asyncHandler((req, res) => res.send("Obter informação do exercicio dos parametros")));
 router.put("/companies/:company_id/exercises/:exercise_id", asyncHandler((req, res) => res.send("Editar o exercicio dos parametros.")));

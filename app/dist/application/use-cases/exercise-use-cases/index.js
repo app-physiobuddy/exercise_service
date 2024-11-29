@@ -1,5 +1,5 @@
-import createExerciseUseCase from "./createExerciseUseCase";
-class CategoryUseCases {
+import createExerciseUseCase from "./createExerciseUseCase.js";
+class ExerciseUseCases {
     constructor(Repository) {
         this.createExercise_use_case = createExerciseUseCase(Repository);
     }
@@ -7,4 +7,4 @@ class CategoryUseCases {
         return await this.createExercise_use_case(data);
     }
 }
-export default CategoryUseCases;
+export default ExerciseUseCases;

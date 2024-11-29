@@ -10,20 +10,22 @@ export interface Category {
 }
 
 export interface Exercise {
-    id_exercise: number;
+    id_exercise?: number;
     id_company: number;
+    name: string;
     desc: string;
     obs: string;
     video_dir: string;
-    date_created: Date;
-    date_updated?: Date | null;
+    date_created?: Date;
+    date_updated: Date | null;
     date_deleted?: Date | null;
-    is_deleted: boolean;
+    is_deleted?: boolean;
     id_created_by: number;
     id_category: number;
-    category: Category; 
+    //category: Category; 
     //plan_exercises: PlanExercise[];
   }
+  
   
   export interface Plan {
     id_plan: number;
@@ -31,7 +33,7 @@ export interface Exercise {
     id_pac: number;
     date_start: Date;
     date_end: Date;
-    plan_exercises: PlanExercise[];
+    //plan_exercises: PlanExercise[];
   }
 
   export interface PlanExercise {
@@ -45,8 +47,8 @@ export interface Exercise {
     friday: boolean;
     saturday: boolean;
     sunday: boolean;
-    plan: Plan;
-    exercise: Exercise;
+    //plan: Plan;
+    //exercise: Exercise;
   }
 
   /*

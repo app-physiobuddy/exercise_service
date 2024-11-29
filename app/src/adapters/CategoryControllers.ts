@@ -1,13 +1,14 @@
 import { CategoryUseCasesInterface } from "../application/use-cases/category-use-cases";
 import TypeHttp from "../framework/http.type";
 import ErrorTypes from "../utils/errors/ErrorTypes.js";
+import { DbGatewayContract } from "./DbGatewayContract.type";
 import assertRole from "./helpers/assertRole.js";
 
 class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Response"]>  {
-    private gatewayUseCases: CategoryUseCasesInterface;
+    private categoryUseCases: DbGatewayContract["categoryRepository"];
 
-    constructor(gatewayUseCases: CategoryUseCasesInterface) {
-        this.gatewayUseCases = gatewayUseCases;
+    constructor(categoryUseCases: CategoryUseCasesInterface) {
+        this.categoryUseCases = categoryUseCases;
     }
 
     async createCategory(req:Req, res:Res) {
@@ -31,7 +32,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         }
 
         assertRole(user.role).isTherapistOrTherapistAdmin()
-        const response = await this.gatewayUseCases.createCategory(data);
+        const response = await this.categoryUseCases.createCategory(data);
 
         return res.status(201).json({
             success: response,
@@ -54,7 +55,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         const id_comp = Number(user.id_comp) // || Number(req.params.company_id);
 
         assertRole(user.role).isTherapistOrCompany()
-        const response = await this.gatewayUseCases.getCategoryById(id_comp, category_id);
+        const response = await this.categoryUseCases.getCategoryById(id_comp, category_id);
 
         return res.status(200).json({
             success: Boolean(response),
@@ -82,7 +83,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         }
 
         assertRole(user.role).isTherapistAdminOrCompany()
-        const response = await this.gatewayUseCases.updateCategory(data);
+        const response = await this.categoryUseCases.updateCategory(data);
 
         return res.status(200).json({
             success: Boolean(response),
@@ -101,7 +102,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         
 
         assertRole(user.role).isTherapistOrCompany()
-        const response = await this.gatewayUseCases.getCategoriesByCompanyId(id_comp);
+        const response = await this.categoryUseCases.getCategoriesByCompanyId(id_comp);
 
         return res.status(200).json({
             success: Boolean(response),
@@ -123,7 +124,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         if (!category_id) throw ErrorTypes.UnauthorizedAccess("category_id is required");
 
         assertRole(user.role).isTherapistAdminOrCompany()
-        const response = await this.gatewayUseCases.deleteCategory(id_comp, category_id);
+        const response = await this.categoryUseCases.deleteCategory(id_comp, category_id);
 
         return res.status(200).json({
             success: Boolean(response),

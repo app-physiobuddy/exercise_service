@@ -1,8 +1,8 @@
-import { Category, Exercise } from "../../entities/Category";
+import { Category, Exercise } from "../../entities/Entities";
 import { DbGatewayContract } from "../../../adapters/DbGatewayContract.type";
 import { CategoryUseCasesInterface } from "../category-use-cases/index";
 
-export default function getCategoryByIdUseCase (Repository: DbGatewayContract<Category, Exercise>)
+export default function getCategoryByIdUseCase (Repository: DbGatewayContract["categoryRepository"])
 : CategoryUseCasesInterface["getCategoryById"]  {
     
     return async (id_comp:number, category_id:number) => {
