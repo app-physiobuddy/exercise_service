@@ -16,6 +16,7 @@ export interface CategoryUseCasesInterface {
     deleteCategory: (id_comp:number, category_id: number) => Promise<boolean| undefined>;
   }
 
+  
 class CategoryUseCases implements CategoryUseCasesInterface {
     private createCategory_use_case: CategoryUseCasesInterface["createCategory"];
     private getCategoryById_use_case: CategoryUseCasesInterface["getCategoryById"];

@@ -40,5 +40,41 @@ class ExerciseControllers {
             message: response ? "New exercise created" : "Error creating exercise"
         });
     }
+    async getExercisesByCompanyId(req, res) {
+        /*
+       user.role
+       user.id_comp
+       */
+        if (!req.body.user)
+            throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
+        const user = req.body.user;
+        const id_comp = Number(user.id_comp);
+        assertRole(user.role).isTherapistOrCompany();
+        const response = await this.exerciseUseCases.getExercisesByCompanyId(id_comp);
+        return res.status(200).json({
+            success: Boolean(response),
+            message: response ? response : "Error getting exercises"
+        });
+    }
+    async getExerciseById(req, res) {
+        /*
+       user.role
+       user.id_comp
+       data.id_exercise
+       */
+        if (!req.body.user)
+            throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
+        if (!req.body.data)
+            throw ErrorTypes.UnauthorizedAccess("data is required");
+        const user = req.body.user;
+        const id_comp = Number(user.id_comp);
+        const id_exercise = Number(req.body.data.id_exercise);
+        assertRole(user.role).isTherapistOrCompany();
+        const response = await this.exerciseUseCases.getExerciseById(id_comp, id_exercise);
+        return res.status(200).json({
+            success: Boolean(response),
+            message: response ? response : "Error getting exercise"
+        });
+    }
 }
 export default ExerciseControllers;

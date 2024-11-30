@@ -34,15 +34,15 @@ router.get("/companies/:company_id/categories", asyncHandler((req: Request, res:
   categoryControllers.getCategoriesByCompanyId(req, res)
 ));
 
-router.get("/companies/:company_id/:category_id", asyncHandler((req: Request, res: Response) => 
+router.get("/companies/:company_id/categories/:category_id", asyncHandler((req: Request, res: Response) => 
   categoryControllers.getCategoryById(req, res)
 ));
 
-router.put("/companies/:company_id/:category_id", asyncHandler((req: Request, res: Response) => 
+router.put("/companies/:company_id/categories/:category_id", asyncHandler((req: Request, res: Response) => 
   categoryControllers.updateCategory(req, res)
 ));
 
-router.delete("/companies/:company_id/:category_id", asyncHandler((req: Request, res: Response) => 
+router.delete("/companies/:company_id/categories/:category_id", asyncHandler((req: Request, res: Response) => 
   categoryControllers.deleteCategory(req, res)
 ));
 
@@ -52,11 +52,11 @@ router.post("/companies/:company_id/exercises", asyncHandler((req: Request, res:
 ));
 
 router.get("/companies/:company_id/exercises", asyncHandler((req: Request, res: Response) => 
-  res.send("Listar todos os exercícios da empresa.")
+  exerciseControllers.getExercisesByCompanyId(req, res)
 ));
 
 router.get("/companies/:company_id/exercises/:exercise_id", asyncHandler((req: Request, res: Response) => 
-  res.send("Obter informação do exercicio dos parametros")
+  exerciseControllers.getExerciseById(req, res)
 ));
 
 router.put("/companies/:company_id/exercises/:exercise_id", asyncHandler((req: Request, res: Response) => 
@@ -86,6 +86,7 @@ router.get("/patients/:patients_id/plans", asyncHandler((req: Request, res: Resp
   res.send("Obter lista de planos de associados a esse paciente.")
 ));
 
+//PUT
 router.post("/patients/:patients_id/plans/:plans_id/exercises/:exercises_id/done", asyncHandler((req: Request, res: Response) => 
   res.send("Paciente marcar um exercício de um plano como feito.")
 ));

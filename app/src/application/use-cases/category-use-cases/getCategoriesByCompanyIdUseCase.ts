@@ -6,6 +6,7 @@ export default function getCategoriesByCompanyIdUseCase (Repository: DbGatewayCo
 : CategoryUseCasesInterface["getCategoriesByCompanyId"]  {
     
     return async (id_comp:number) => {
+        console.log("CATE  USE CASE CALLES")
         return await Repository.getCategoriesByCompanyId(id_comp)
     }
 }

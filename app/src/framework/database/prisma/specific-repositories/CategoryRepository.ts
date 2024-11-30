@@ -54,9 +54,8 @@ class CategoryRepository implements CategoryRepository {
   async getCategoriesByCompanyId(id_comp: number): Promise<Category[]> {
     try {
       const result = await this.prisma.category.findMany({
-        where: { id_comp },
+        where: { id_comp:id_comp },
       });
-      console.warn(result);
       if (result.length === 0) {
         throw ErrorTypes.DatabaseError('No categories found for the given company ID');
       }
@@ -68,7 +67,6 @@ class CategoryRepository implements CategoryRepository {
   
 
   async deleteCategory(id_comp: number, id_category: number) {
-    console.log("RUNS")
     try {
       const result = await this.prisma.category.update({
         where: { id_category: id_category, id_comp: id_comp },

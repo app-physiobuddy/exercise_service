@@ -30,6 +30,8 @@ model Exercise {
   id_category    Int
   category       Category @relation(fields: [id_category], references: [id_category])
   plan_exercises PlanExercise[]
+
+  @@unique([id_company, name])
 }
 
 model Category {

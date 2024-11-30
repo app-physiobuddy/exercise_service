@@ -46,9 +46,8 @@ class CategoryRepository {
     async getCategoriesByCompanyId(id_comp) {
         try {
             const result = await this.prisma.category.findMany({
-                where: { id_comp },
+                where: { id_comp: id_comp },
             });
-            console.warn(result);
             if (result.length === 0) {
                 throw ErrorTypes.DatabaseError('No categories found for the given company ID');
             }
@@ -59,7 +58,6 @@ class CategoryRepository {
         }
     }
     async deleteCategory(id_comp, id_category) {
-        console.log("RUNS");
         try {
             const result = await this.prisma.category.update({
                 where: { id_category: id_category, id_comp: id_comp },

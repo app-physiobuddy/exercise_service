@@ -37,6 +37,7 @@ class CategoryControllers {
         data.category_id
         */
         //if (!req.body.data) throw ErrorTypes.UnauthorizedAccess("data.category_id is required");
+        console.log("HERE");
         const category_id = Number(req.body.data?.category_id) || Number(req.params.company_id);
         if (!req.body.user)
             throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
@@ -80,6 +81,7 @@ class CategoryControllers {
         user.role
         user.id_comp
         */
+        console.log("CALLED CONTROLLER CAtegory");
         if (!req.body.user)
             throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
         const user = req.body.user;

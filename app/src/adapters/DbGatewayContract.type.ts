@@ -12,6 +12,8 @@ export interface CategoryRepositorInterface {
 
   export interface ExerciceRepositoryInterface {
     createExercise: ExerciceUseCasesInterface["createExercise"];
+    getExercisesByCompanyId: ExerciceUseCasesInterface["getExercisesByCompanyId"];
+    getExerciseById: ExerciceUseCasesInterface["getExerciseById"];
   }
 
 
