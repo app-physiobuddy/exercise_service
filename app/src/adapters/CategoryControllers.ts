@@ -69,7 +69,7 @@ class CategoryControllers<Req extends TypeHttp["Request"], Res extends TypeHttp[
         user.id_comp
         data (everything that updates + category_id)
         */
-        const category_id = Number(req.body.data?.category_id) || Number(req.params.company_id);
+        const category_id = Number(req.body.data?.category_id) || Number(req.params.category_id);
         if (!req.body.data) throw ErrorTypes.UnauthorizedAccess("data.category_id is required");
 
         if (!req.body.user) throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");

@@ -26,7 +26,7 @@ model Exercise {
   date_updated   DateTime? @db.Timestamptz
   date_deleted   DateTime? @db.Timestamptz
   is_deleted     Boolean @default(false)
-  id_created_by  Int
+  id_created_by  Int @default(0)
   id_category    Int
   category       Category @relation(fields: [id_category], references: [id_category])
   plan_exercises PlanExercise[]
@@ -60,14 +60,21 @@ model Plan {
 model PlanExercise {
   id_plan        Int
   id_exercise    Int
-  exercise_desc  Boolean
-  monday         Boolean
-  tuesday        Boolean
-  wednesday      Boolean
-  thursday       Boolean
-  friday         Boolean
-  saturday       Boolean
-  sunday         Boolean
+  exercise_desc  String
+  monday         Boolean @default(false)
+  monday_done    Boolean @default(false)
+  tuesday        Boolean @default(false)
+  tuesday_done    Boolean @default(false)
+  wednesday      Boolean @default(false)
+  wednesday_done    Boolean @default(false)
+  thursday       Boolean @default(false)
+  thursday_done    Boolean @default(false)
+  friday         Boolean @default(false)
+  friday_done    Boolean @default(false)
+  saturday       Boolean @default(false)
+  saturday_done    Boolean @default(false)
+  sunday         Boolean @default(false)
+  sunday_done    Boolean @default(false)
   plan           Plan     @relation(fields: [id_plan], references: [id_plan])
   exercise       Exercise @relation(fields: [id_exercise], references: [id_exercise])
 

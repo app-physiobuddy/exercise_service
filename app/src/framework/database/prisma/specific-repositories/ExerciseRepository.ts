@@ -12,7 +12,6 @@ class ExerciseRepository implements ExerciceRepositoryInterface {
     this.prisma = prisma;
   }
   async createExercise(data: Exercise) {
-    console.log(data)
     try {
       const result = await this.prisma.exercise.create({ data })
       if (!result) throw ErrorTypes.DatabaseError('Error creating exercise')
@@ -49,6 +48,38 @@ class ExerciseRepository implements ExerciceRepositoryInterface {
       return result
     } catch (error) {
         throw ErrorTypes.DatabaseError('Error getting exercise. It may not exist')
+    }
+  }
+  async updateExercise(
+    data: Exercise
+  ) {
+    console.log(data)
+    try {
+      return await this.prisma.exercise.update({
+        where: { id_exercise: data.id_exercise, id_company:data.id_company},
+        data
+      })
+    } catch (error) {
+      console.log(error)
+      throw ErrorTypes.DatabaseError('Error updating exercise.')
+    }
+  }
+  async deleteExercise(id_comp: number, id_exercise: number) {
+    console.log(id_comp, id_exercise)
+    try {
+      const result = await this.prisma.exercise.update({
+        where: { id_exercise: id_exercise, id_company: id_comp },
+        data: { 
+          is_deleted: true, 
+          date_deleted: new Date() 
+        }
+        
+      })
+      if (!result) throw ErrorTypes.DatabaseError('Error deleting exercise')
+      return true
+    } catch (error) {
+      console.log(error)
+      throw ErrorTypes.DatabaseError('Error deleting exercise');
     }
   }
  

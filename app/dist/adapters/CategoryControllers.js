@@ -56,7 +56,7 @@ class CategoryControllers {
         user.id_comp
         data (everything that updates + category_id)
         */
-        const category_id = Number(req.body.data?.category_id) || Number(req.params.company_id);
+        const category_id = Number(req.body.data?.category_id) || Number(req.params.category_id);
         if (!req.body.data)
             throw ErrorTypes.UnauthorizedAccess("data.category_id is required");
         if (!req.body.user)

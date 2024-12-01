@@ -2,11 +2,13 @@ import { Router, Request, Response, NextFunction, Errback } from "express";
 
 export const router = Router();
 
+import PrismaRepository from "../framework/database/prisma/PrismaRepository.js";
 import CategoryControllers from "../adapters/CategoryControllers.js";
 import ExerciseControllers from "../adapters/ExerciseControllers.js";
-import PrismaRepository from "../framework/database/prisma/PrismaRepository.js";
+import PlanControllers from "../adapters/PlanControllers.js";
 import CategoryUseCases from "../application/use-cases/category-use-cases/index.js";
 import ExerciseUseCases from "../application/use-cases/exercise-use-cases/index.js";
+import PlanUseCases from "../application/use-cases/plan-use-cases/index.js";
 
 const prismaRepository = new PrismaRepository();
 const categoryUseCases = new CategoryUseCases(prismaRepository.categoryRepository);
@@ -14,6 +16,9 @@ const categoryControllers = new CategoryControllers(categoryUseCases);
 
 const exerciseUseCases = new ExerciseUseCases(prismaRepository.exerciseRepository);
 const exerciseControllers = new ExerciseControllers(exerciseUseCases);
+
+const planUseCases = new PlanUseCases(prismaRepository.planRepository);
+const planControllers = new PlanControllers(planUseCases);
 
 
 
@@ -46,6 +51,7 @@ router.delete("/companies/:company_id/categories/:category_id", asyncHandler((re
   categoryControllers.deleteCategory(req, res)
 ));
 
+
 //Exercicios
 router.post("/companies/:company_id/exercises", asyncHandler((req: Request, res: Response) => 
   exerciseControllers.createExercise(req, res)
@@ -60,34 +66,36 @@ router.get("/companies/:company_id/exercises/:exercise_id", asyncHandler((req: R
 ));
 
 router.put("/companies/:company_id/exercises/:exercise_id", asyncHandler((req: Request, res: Response) => 
-  res.send("Editar o exercicio dos parametros.")
+  exerciseControllers.updateExercise(req, res)
 ));
 
 router.delete("/companies/:company_id/exercises/:exercise_id", asyncHandler((req: Request, res: Response) => 
-  res.send("Remover o exercicio dos parametros.")
+  exerciseControllers.deleteExercise(req, res)
 ));
 
 
 //Planos
 
 router.post("/therapists/:therapists_id/plans", asyncHandler((req: Request, res: Response) => 
-  res.send("criar um plano para um paciente.")
-));
-
-router.get("/patients/:patients_id/plans/:plans_id", asyncHandler((req: Request, res: Response) => 
-  res.send("Obter informação de um plano especifico de um paciente.")
-));
-
-router.get("/therapists/:therapists_id/patients/:patients_id/plans/progress", asyncHandler((req: Request, res: Response) => 
-  res.send("Listar os exercícios que um paciente completou e quando")
+  planControllers.createPlan(req, res)
 ));
 
 router.get("/patients/:patients_id/plans", asyncHandler((req: Request, res: Response) => 
-  res.send("Obter lista de planos de associados a esse paciente.")
+  planControllers.getPlansByPatientId(req, res)
 ));
 
-//PUT
-router.post("/patients/:patients_id/plans/:plans_id/exercises/:exercises_id/done", asyncHandler((req: Request, res: Response) => 
-  res.send("Paciente marcar um exercício de um plano como feito.")
+router.post("/patients/:patients_id/plans/:plans_id/exercises/:exercises_id/day/:day/done", asyncHandler((req: Request, res: Response) => 
+  //"Paciente marcar um dia do exercício de um plano como feito.
+  planControllers.onPlanMarkDayAsDone(req, res)
 ));
 
+router.get("/patients/:patients_id/plans/:plans_id", asyncHandler((req: Request, res: Response) => 
+  //res.send("Obter informação de um plano especifico de um paciente.")
+  planControllers.getPlanByIdAndPatientId(req, res)
+));
+
+router.get("/therapists/:therapists_id/patients/:patients_id/plans/:plans_id/progress", asyncHandler((req: Request, res: Response) => 
+  //res.send("Listar os exercícios que um paciente completou e quando")
+//get all, expose done and date
+  planControllers.getAllExercisesDone(req, res)
+));

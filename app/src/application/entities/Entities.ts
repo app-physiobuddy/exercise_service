@@ -1,9 +1,11 @@
+//all optional values must default on bd
+
 export interface Category {
-    id_category?: number; //defaults on prisma db
+    id_category?: number;
     name: string;
     desc: string;
     id_comp: number;
-    date_created?: Date; //defaults on prisma db
+    date_created?: Date;
     date_updated: Date | null;
     date_deleted?: Date | null;
     is_deleted?: boolean;
@@ -20,7 +22,7 @@ export interface Exercise {
     date_updated: Date | null;
     date_deleted?: Date | null;
     is_deleted?: boolean;
-    id_created_by: number;
+    id_created_by?: number
     id_category: number;
     //category: Category; 
     //plan_exercises: PlanExercise[];
@@ -28,42 +30,46 @@ export interface Exercise {
   
   
   export interface Plan {
-    id_plan: number;
+    id_plan?: number;
     id_physio: number;
     id_pac: number;
     date_start: Date;
     date_end: Date;
-    //plan_exercises: PlanExercise[];
+    plan_exercises?: PlanExercise[];
   }
 
   export interface PlanExercise {
     id_plan: number;
     id_exercise: number;
-    exercise_desc: boolean;
-    monday: boolean;
-    tuesday: boolean;
-    wednesday: boolean;
-    thursday: boolean;
-    friday: boolean;
-    saturday: boolean;
-    sunday: boolean;
+    exercise_desc: string;
+    monday?: boolean;
+    monday_done?: boolean;
+    tuesday?: boolean;
+    tuesday_done?: boolean;
+    wednesday?: boolean;
+    wednesday_done?: boolean;
+    thursday?: boolean;
+    thursday_done?: boolean;
+    friday?: boolean;
+    friday_done?: boolean;
+    saturday?: boolean;
+    saturday_done?: boolean;
+    sunday?: boolean;
+    sunday_done?: boolean;
+    exercise: Exercise;
     //plan: Plan;
-    //exercise: Exercise;
   }
 
-  /*
-  async function getPlanWithExercises(planId: number): Promise<Plan> {
-  const plan = await prisma.plan.findUnique({
-    where: { id_plan: planId },
-    include: {
-      plan_exercises: {
-        include: {
-          exercise: true,
-        },
-      },
-    },
-  });
-  return plan as Plan;
-}
+  export interface PatientDoesExercise {
+      id_plan: number;
+      id_exercise: number;
+      id_pac: number;
+      monday_done?: boolean;
+      tueday_done?: boolean;
+      wednesday_done?: boolean;
+      thursday_done?: boolean;
+      friday_done?: boolean;
+      saturday_done?: boolean;
+      sunday_done?: boolean;
+  }
 
-  */
