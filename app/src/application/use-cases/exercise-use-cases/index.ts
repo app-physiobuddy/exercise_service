@@ -5,6 +5,7 @@ import getExercisesByCompanyIdUseCase from "./getExercisesByCompanyIdUseCase.js"
 import getExerciseByIdUseCase from "./getExerciseByIdUseCase.js";
 import updateExerciseUseCase from "./updateExerciseUseCase.js";
 import deleteExerciseUseCase from "./deleteExerciseUseCase.js"
+import MqttProvider from "../../../framework/providers/MqttProvider";
 
 export interface ExerciceUseCasesInterface {
     createExercise: (exercise: Exercise) => Promise<boolean| undefined>;
@@ -23,10 +24,11 @@ class ExerciseUseCases implements ExerciceUseCasesInterface {
     private deleteExercise_use_case: ExerciceUseCasesInterface["deleteExercise"]
 
     constructor(
-        Repository: DbGatewayContract["exerciseRepository"]
+        Repository: DbGatewayContract["exerciseRepository"],
+        Mqtt: InstanceType<typeof MqttProvider>
     ){
-        this.createExercise_use_case = createExerciseUseCase(Repository);
-        this.getExercisesByCompanyId_use_case = getExercisesByCompanyIdUseCase(Repository);
+        this.createExercise_use_case = createExerciseUseCase(Repository, Mqtt);
+        this.getExercisesByCompanyId_use_case = getExercisesByCompanyIdUseCase(Repository );
         this.getExerciseById_use_case = getExerciseByIdUseCase(Repository);
         this.updateExercise_use_case = updateExerciseUseCase(Repository);
         this.deleteExercise_use_case = deleteExerciseUseCase(Repository)

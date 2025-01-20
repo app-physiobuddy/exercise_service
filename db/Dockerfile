@@ -1,7 +1,7 @@
 FROM postgres
 
-ENV POSTGRES_DB=exercise_db       
-ENV POSTGRES_PASSWORD=postgres
-ENV POSTGRES_USER=postgres
+# Creio que este não funciona!
+ENV PGPORT=${PGPORT}
 
-#COPY init.sql /docker-entrypoint-initdb.d/
+EXPOSE ${PGPORT}
+

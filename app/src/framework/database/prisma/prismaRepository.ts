@@ -14,7 +14,8 @@ export class PrismaRepository implements DbGatewayContract {
 
   constructor() {
     this.prismaClient = new PrismaClient({
-      log: ['query', 'info', 'warn', 'error']
+      log: ['query', 'info', 'warn', 'error'],
+     
     });
 
     this.categoryRepository = new CategoryRepository(this.prismaClient);

@@ -4,8 +4,8 @@ import onPlanMarkDayAsDoneUseCase from "./onPlanMarkDayAsDoneUseCase.js";
 import getPlanByIdAndPatientIdUseCase from "./getPlanByIdAndPatientIdUseCase.js";
 import getAllExercisesDoneUseCase from "./getAllExercisesDoneUseCase.js";
 class PlanUseCases {
-    constructor(Repository) {
-        this.createPlan_use_case = createPlanUseCase(Repository);
+    constructor(Repository, Mqtt) {
+        this.createPlan_use_case = createPlanUseCase(Repository, Mqtt);
         this.getPlansByPatientId_use_case = getPlansByPatientId(Repository);
         this.onPlanMarkDayAsDone_use_case = onPlanMarkDayAsDoneUseCase(Repository);
         this.getPlanByIdAndPatientId_use_case = getPlanByIdAndPatientIdUseCase(Repository);

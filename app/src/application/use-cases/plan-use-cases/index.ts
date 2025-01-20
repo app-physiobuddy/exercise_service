@@ -5,6 +5,7 @@ import getPlansByPatientId from "./getPlansByPatientIdUseCase.js";
 import onPlanMarkDayAsDoneUseCase from "./onPlanMarkDayAsDoneUseCase.js";
 import getPlanByIdAndPatientIdUseCase from "./getPlanByIdAndPatientIdUseCase.js";
 import getAllExercisesDoneUseCase, { GetAllExercisesDoneResponseType } from "./getAllExercisesDoneUseCase.js";
+import MqttProvider from "../../../framework/providers/MqttProvider";
 
 
 export interface PlanUseCasesInterface {
@@ -25,9 +26,10 @@ class PlanUseCases implements PlanUseCasesInterface {
 
 
     constructor(
-        Repository: DbGatewayContract["planRepository"]
+        Repository: DbGatewayContract["planRepository"],
+        Mqtt: InstanceType<typeof MqttProvider>
     ){
-        this.createPlan_use_case = createPlanUseCase(Repository);
+        this.createPlan_use_case = createPlanUseCase(Repository, Mqtt);
         this.getPlansByPatientId_use_case = getPlansByPatientId(Repository);
         this.onPlanMarkDayAsDone_use_case = onPlanMarkDayAsDoneUseCase(Repository);
         this.getPlanByIdAndPatientId_use_case = getPlanByIdAndPatientIdUseCase(Repository);

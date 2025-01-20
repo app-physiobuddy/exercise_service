@@ -4,8 +4,8 @@ import getExerciseByIdUseCase from "./getExerciseByIdUseCase.js";
 import updateExerciseUseCase from "./updateExerciseUseCase.js";
 import deleteExerciseUseCase from "./deleteExerciseUseCase.js";
 class ExerciseUseCases {
-    constructor(Repository) {
-        this.createExercise_use_case = createExerciseUseCase(Repository);
+    constructor(Repository, Mqtt) {
+        this.createExercise_use_case = createExerciseUseCase(Repository, Mqtt);
         this.getExercisesByCompanyId_use_case = getExercisesByCompanyIdUseCase(Repository);
         this.getExerciseById_use_case = getExerciseByIdUseCase(Repository);
         this.updateExercise_use_case = updateExerciseUseCase(Repository);

@@ -11,20 +11,9 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
     }
 
     async createPlan(req:Req, res:Res) {
-        /*
-        user.role
-        user.physio_id
-
-            id_plan : req.body.data.id_plan,
-            id_physio : req.body.data.id_physio,
-            id_pac: req.body.data.id_pac,
-            date_start : req.body.data.date_start,
-            date_end : req.body.data.date_end,
-        */
+        console.log("createPlan EXERCISE SRVICE CALLED")
         if (!req.body.data) throw ErrorTypes.UnauthorizedAccess("data is required");
 
-        const user = req.body.user;
-        if (!user.role || !user.physio_id) throw ErrorTypes.UnauthorizedAccess("user.role, user.physio_id is required");
         
         const data = {
             id_physio : req.body.data.id_physio,
@@ -33,6 +22,7 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
             date_end : req.body.data.date_end,
             plan_exercises : req.body.data.plan_exercises
         }
+        console.log(data)
         for (let i = 0; i < data.plan_exercises.length; i++) {
             if(!data.plan_exercises[i].monday) data.plan_exercises[i].monday = false
             if(!data.plan_exercises[i].tuesday) data.plan_exercises[i].tuesday = false
@@ -44,7 +34,7 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
         }
 
 
-        assertRole(user.role).isTherapist()
+
         const response = await this.planUseCases.createPlan(data);
 
         return res.status(201).json({
@@ -53,19 +43,9 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
         });
     }
     async getPlansByPatientId(req:Req, res:Res) {
-         /*
-        user.role
-        user.physio_id
-        data.id_pac
-        */
-        if (!req.body.user) throw ErrorTypes.UnauthorizedAccess("user.role and user.physio_id is required");
-        const user = req.body.user;
-        const physio_id = Number(user.physio_id)
 
-        if (!req.body.data) throw ErrorTypes.UnauthorizedAccess("data.id_pac is required");
-        const id_pac = Number(req.body.data.id_pac)
-
-        assertRole(user.role).isPatientOrTherapist()
+        if (!req.params.patient_id) throw ErrorTypes.UnauthorizedAccess("patient_id is required");
+        const id_pac = Number(req.params.patient_id)
         const response = await this.planUseCases.getPlansByPatientId(id_pac);
 
         return res.status(200).json({
@@ -89,26 +69,25 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
         data.saturday_done
         data.sunday_done
         */
-        if (!req.body.user.role) throw ErrorTypes.UnauthorizedAccess("user.role is required");
-        if (!req.body.user.id_pac) throw ErrorTypes.UnauthorizedAccess("user.id_pac is required");
-        const user = req.body.user;
+        if (!req.params.patient_id) throw ErrorTypes.UnauthorizedAccess("patient_id is required");
+        if (!req.params.plan_id) throw ErrorTypes.UnauthorizedAccess("plan_id is required");
+        if (!req.params.exercise_id) throw ErrorTypes.UnauthorizedAccess("exercise_id is required");
+        const {patient_id, plan_id, exercise_id, day} = req.params
 
-
-        if (!req.body.data) throw ErrorTypes.UnauthorizedAccess("data is required");
 
         const data = {
-            id_plan : Number(req.body.data.id_plan),
-            id_exercise : Number(req.body.data.id_exercise),
-            id_pac : Number(user.id_pac),
-            monday_done : req.body.data.monday_done || false,
-            tuesday_done : req.body.data.tueday_done || false,
-            wednesday_done : req.body.data.wednesday_done || false,
-            thursday_done : req.body.data.thursday_done || false,
-            friday_done : req.body.data.friday_done || false,
-            saturday_done : req.body.data.saturday_done || false,
-            sunday_done : req.body.data.sunday_done || false,
+            id_plan : Number(plan_id),
+            id_exercise : Number(exercise_id),
+            id_pac : Number(patient_id),
+            monday_done : req.body.data.monday_done,// || false,
+            tuesday_done : req.body.data.tuesday_done,// || false,
+            wednesday_done : req.body.data.wednesday_done,// || false,
+            thursday_done : req.body.data.thursday_done,// || false,
+            friday_done : req.body.data.friday_done,// || false,
+            saturday_done : req.body.data.saturday_done, //|| false,
+            sunday_done : req.body.data.sunday_done //|| false,
         }
-        assertRole(user.role).isPatient()
+
         const response = await this.planUseCases.onPlanMarkDayAsDone(data);
 
         return res.status(200).json({
@@ -118,23 +97,9 @@ class PlanControllers<Req extends TypeHttp["Request"], Res extends TypeHttp["Res
     }
 
     async getPlanByIdAndPatientId(req:Req, res:Res) {
-        /*
-       user.role
-       data.id_pac
-       data.id_plan
-       */
-       if (!req.body.user.role) throw ErrorTypes.UnauthorizedAccess("user.role is required");
-       const user = req.body.user;
-
-       if (!req.body.data.id_pac || !req.body.data.id_plan) throw ErrorTypes.UnauthorizedAccess("data.id_pac & data.id_plan is required");
-        const data = {
-            id_pac : Number(req.body.data.id_pac),
-            id_plan : Number(req.body.data.id_plan)
-        }
-       
-
-       assertRole(user.role).isPatientOrTherapist()
-       const response = await this.planUseCases.getPlanByIdAndPatientId(data.id_pac, data.id_plan);
+       if(!req.params.patient_id || !req.params.plan_id) throw ErrorTypes.UnauthorizedAccess("patient_id & plan_id is required");
+       const {patient_id, plan_id} = req.params
+       const response = await this.planUseCases.getPlanByIdAndPatientId(Number(patient_id), Number(plan_id));
 
        return res.status(200).json({
            success: Boolean(response),

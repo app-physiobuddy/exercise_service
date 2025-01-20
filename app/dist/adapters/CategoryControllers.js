@@ -5,25 +5,18 @@ class CategoryControllers {
         this.categoryUseCases = categoryUseCases;
     }
     async createCategory(req, res) {
-        /*
-        user.role
-        user.id_comp
-        data.name
-        data.desc
-        */
         const prepareCategoryData = req.body.data;
         if (!prepareCategoryData)
             throw ErrorTypes.UnauthorizedAccess("data is required");
-        const user = req.body.user;
-        if (!user.role || !user.id_comp)
-            throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
+        const id_comp = Number(req.params.user_id);
+        if (!id_comp)
+            throw ErrorTypes.UnauthorizedAccess("user.id is required");
         const data = {
             name: prepareCategoryData.name,
             desc: prepareCategoryData.desc,
-            id_comp: user.id_comp,
+            id_comp: id_comp,
             date_updated: new Date(),
         };
-        assertRole(user.role).isTherapistOrTherapistAdmin();
         const response = await this.categoryUseCases.createCategory(data);
         return res.status(201).json({
             success: response,
@@ -77,16 +70,7 @@ class CategoryControllers {
         });
     }
     async getCategoriesByCompanyId(req, res) {
-        /*
-        user.role
-        user.id_comp
-        */
-        console.log("CALLED CONTROLLER CAtegory");
-        if (!req.body.user)
-            throw ErrorTypes.UnauthorizedAccess("user.role and user.id_comp is required");
-        const user = req.body.user;
-        const id_comp = Number(user.id_comp); // || Number(req.params.company_id);
-        assertRole(user.role).isTherapistOrCompany();
+        const id_comp = Number(req.params.user_id);
         const response = await this.categoryUseCases.getCategoriesByCompanyId(id_comp);
         return res.status(200).json({
             success: Boolean(response),
